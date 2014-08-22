@@ -31,7 +31,7 @@ def cleanString(recommendation):
 # returns: a list of all recognized MeSH terms in the recommendation,
 # as strings, and containing disjuntion operators
 # example input: "tamoxifen"
-# example output: [("tamoxifen"[MeSH Terms] OR "tamoxifen"[All Fields])]
+# example output: ["tamoxifen"]
 def getMeSHTerms(recommendation):
 	# convert to string seperated by + signs (for HTTP encoding of spaces)
 	recommendation = "+".join(recommendation)

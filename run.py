@@ -92,97 +92,34 @@ primaryterms, filteredprimaryterms, secondaryterms = \
 
 
 #--------------------------------------
-# PART 3: execute (combined) query)
+# PART 3: execute query
 #--------------------------------------
-			
-# combine with old query
-#query +=  (" AND \"" + query2)
 
-q1 = True
-q2 = False
-q3 = False
+
 searchresults = {}
 resultcount = 0
-if q1:
-	# QUERY 1
-	print "Executing Query 1"
-	query1, resultsdict, nr_of_results = \
-		performquery.searchByCombination(majorterms, [], 200, earlyyear, lateyear)
+
+print "Executing Query 1"
+query1, resultsdict, nr_of_results = \
+	performquery.searchByCombination(majorterms, [], 50, earlyyear, lateyear)
 
 
-	out.write("<h3>Query 1, number of results: %i</h3>" % (nr_of_results))
-	# output: query for PubMed
-	out.write("<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?term=" + \
-		query1.replace(" ", "+").replace("\"", "&quot;") + "\">Link</a><br />")
-	out.write(query)
+out.write("<h3>Query 1, number of results: %i</h3>" % (nr_of_results))
+# output: query for PubMed
+out.write("<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?term=" + \
+	query1.replace(" ", "+").replace("\"", "&quot;") + "\">Link</a><br />")
+out.write(query)
 
 
-	# If there is only one result, PubMed will return it as a string
-	# rather than a list. In this case, convert it to a list with one element
-	searchresults = processresults.processResults(resultsdict, searchresults)
-	resultcount += nr_of_results
-
-if q2:
-	# QUERY 2
-	print "Executing Query 2"
-	# perform query
-	print primaryterms
-	print secondaryterms
-	print majorterms
-	comboterms = set(primaryterms + majorterms)
-	query2, resultsdict, nr_of_results = \
-		performquery.searchByTerms(primaryterms + secondaryterms, 10, earlyyear, lateyear)
-
-	out.write("<h3>Query 2, number of results: %i</h3>" % (nr_of_results))
-
-	# output: query for PubMed
-	out.write("<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?term=" + \
-		query2.replace(" ", "+").replace("\"", "&quot;") + "\">Link</a><br />")
-	out.write(query2)
-
-	# add results to dictionary
-	searchresults = processresults.processResults(resultsdict, searchresults)
-	resultcount += nr_of_results
-
-if q3:
-	## COMBINED query (EXPERIMENTAL)
-	print "Executing query 3"
-	pterms = []
-	# extract MeSH terms
-	for term in primaryterms:
-		for token in term.split(" OR "):
-			if "MeSH" in token:
-				pterms.append(token.split("\"")[1])
-	pterms += majorterms
-	pterms = set(pterms)
-	query3, resultsdict, nr_of_results = \
-		performquery.searchByTerms(pterms, 100, earlyyear, lateyear)
-	out.write("<h3>Query 2, number of results: %i</h3>" % (nr_of_results))
-
-	# output: query for PubMed
-	out.write("<a href=\"http://www.ncbi.nlm.nih.gov/pubmed/?term=" + \
-		query3.replace(" ", "+").replace("\"", "&quot;") + "\">Link</a><br />")
-	out.write(query3)
-
-	# add results to dictionary
-	searchresults = processresults.processResults(resultsdict, searchresults)
-	resultcount += nr_of_results
-
+# If there is only one result, PubMed will return it as a string
+# rather than a list. In this case, convert it to a list with one element
+searchresults = processresults.processResults(resultsdict, searchresults)
+resultcount += nr_of_results
 
 #-----------------------------------
 # PART 4: Rank results
 #-----------------------------------
 
-"""
-# Get related articles for tf/idf ranking
-related = tfidf.getRelated(evidence)
-processevidence.buildMeSHDict(related)
-filelist = []
-# build library
-for id in related:
-	filelist.append("articledata/" + id + ".xml")
-tfidf.builddflib(filelist)
-"""
 # determine relevance	
 searchresults = rank.calculateRelevance(searchresults, recommendation, majorterms)
 
