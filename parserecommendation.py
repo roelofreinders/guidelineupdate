@@ -1,5 +1,4 @@
 from setup import *
-from nltk.corpus import stopwords
 import meshbrowser
 
 # This file contains several methods that are used for part 1 of the project:
@@ -17,9 +16,6 @@ def cleanString(recommendation):
 	#recommendation = recommendation.translate(string.maketrans("",""), string.punctuation)
 	exclude = set(string.punctuation)
 	recommendation = ''.join(ch for ch in recommendation if ch not in exclude)
-
-	# load NLTK stopword corpus
-	# stop = stopwords.words("english")
 
 	# remove stopwords from recommendation
 	recommendation = [i for i in recommendation.split()] # if i not in stop]
