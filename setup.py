@@ -92,7 +92,7 @@ mb = meshbrowser.MeSHBrowser()
 baseURL = "http://eutils.ncbi.nlm.nih.gov/entrez/eutils/"
 pubURL = "http://www.ncbi.nlm.nih.gov/pubmed/"
 # API credentials
-creds = "&email=roelofr@gmail.com&tool=reinders"
+creds = "" # &email=XXX@XXX.com&tool=XXX""
 
 # HTTP processor
 h = httplib2.Http()
